@@ -118,16 +118,16 @@ sig_anly_CHT = sig_n_Re + 1i*sig_n_Im_nCHT((N/2+1):end);
 sig_anly_BPHT = sig_n_Re + 1i*sig_n_Im_BPHT((N/2+1):end);
 
 % cal SNrate
-SN_BPHT = snr(filter(h_HT1,1,sig_n_zeros))
-SN_nCHT = snr(filter(h_CHT,1,sig_n_zeros))
+SN_BPHT = snr(filter(h_HT1,1,sig_n_zeros));
+SN_nCHT = snr(filter(h_CHT,1,sig_n_zeros));
 
 
-figure;
-plot(t, sig_n);
-hold on
-plot(t, sig_n_Im_nCHT((N/2+1):end));
-plot(t, sig_n_Im_BPHT((N/2+1):end));
-hold off
-xlim([0.01 0.02]);
-ylim([-1.5 1.5])
-legend()
+% figure;
+% plot(t, sig_n);
+% hold on
+% plot(t, sig_n_Im_nCHT((N/2+1):end));
+% plot(t, sig_n_Im_BPHT((N/2+1):end));
+% hold off
+% xlim([0.01 0.02]);
+% ylim([-1.5 1.5])
+% legend()
