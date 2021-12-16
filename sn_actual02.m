@@ -13,12 +13,11 @@ set(0,'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2);
 %% params
 % filter params
 N = 28;
-f_transition_width = 0.01;
-f_left_pass  = 0.1;
-f_right_pass = f_left_pass + 0.8;
+f_left_stop  = 0.11;
+f_left_pass  = 0.12;
+f_right_pass = 0.8;
+f_right_stop = 0.9;
 notch_freq_1 = 0.07;
-f_left_stop  = f_left_pass - f_transition_width;
-f_right_stop = f_right_pass + f_transition_width;
 Weight = [1 1 1];
 fs = 4000;
 fs2 = fs/2;
