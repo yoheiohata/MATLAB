@@ -13,11 +13,12 @@ set(0,'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2);
 %% params
 % filter params
 N = 28;
-f_left_stop  = 0.11;
-f_left_pass  = 0.12;
-f_right_pass = 0.8;
-f_right_stop = 0.81;
-notch_freq_1 = 0.07;       
+f_transition_width = 0.01;
+f_left_pass  = 0.1;
+f_right_pass = f_left_pass + 0.8;
+notch_freq_1 = 0.07;
+f_left_stop  = f_left_pass - f_transition_width;
+f_right_stop = f_right_pass + f_transition_width;
 Weight = [1 1 1];
 fs = 4000;
 fs2 = fs/2;
@@ -82,22 +83,22 @@ hold off
 xlim([0 1]);
 ylim([y_low y_high]);
 legend("location", "southeast")
-exportgraphics(gca,strcat('.\figure\nCHT\N=',num2str(N+2),'f=',num2str(f),'w=',num2str(Weight),'.pdf'),'ContentType','vector');
+% exportgraphics(gca,strcat('.\figure\nCHT\N=',num2str(N+2),'f=',num2str(f),'w=',num2str(Weight),'.pdf'),'ContentType','vector');
 
 
-figure; % BPHT vs nCHT
-x = [notch_freq_1 notch_freq_1];
-y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_1);
-
-hold on
-plot(w/fs2, 20*log(abs(H_HT1)),"DisplayName", "conventional");
-plot(w/fs2, 20*log(abs(H_CHT)),"DisplayName", "proposed");
-hold off
-xlim([0 1]);
-ylim([y_low y_high]);
-legend("location", "southeast")
-exportgraphics(gca,strcat('.\figure\nCHTvsBPHT\N=',num2str(N+2),'w=',num2str(Weight),'.pdf'),'ContentType','vector');
+% figure; % BPHT vs nCHT
+% x = [notch_freq_1 notch_freq_1];
+% y = [y_low y_high];
+% line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_1);
+% 
+% hold on
+% plot(w/fs2, 20*log(abs(H_HT1)),"DisplayName", "conventional");
+% plot(w/fs2, 20*log(abs(H_CHT)),"DisplayName", "proposed");
+% hold off
+% xlim([0 1]);
+% ylim([y_low y_high])
+% legend("location", "southeast")
+% exportgraphics(gca,strcat('.\figure\nCHTvsBPHT\N=',num2str(N+2),'w=',num2str(Weight),'.pdf'),'ContentType','vector');
 %% assess signal
 
 % define signal
