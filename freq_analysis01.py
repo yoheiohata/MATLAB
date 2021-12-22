@@ -1,3 +1,4 @@
+# encoding: utf-8
 import csv
 from datetime import date
 import numpy as np
