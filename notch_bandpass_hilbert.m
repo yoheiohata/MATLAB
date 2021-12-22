@@ -85,4 +85,4 @@ hold off
 xlim([0 1]);
 ylim([y_low y_high]);
 legend("location", "southwest")
-exportgraphics(gca,strcat('.\figure\nCHT\N=',num2str(N+2),'f=',num2str(f),'w=',num2str(Weight),'.pdf'),'ContentType','vector');
+exportgraphics(gca,strcat('.\figure\amp_nbpht_N=',num2str(N+2),'.pdf'),'ContentType','vector');

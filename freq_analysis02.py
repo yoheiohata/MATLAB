@@ -2,7 +2,7 @@ from scipy.fft import fft, fftfreq
 import numpy as np
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import logging
 import datetime
@@ -75,7 +75,7 @@ def main():
     plt.plot(freq, amp, label="FFT")
     plt.legend()
     # plt.savefig('./figure/fft.pdf')
-    ax.set_ylim([3, 1])
+    ax.set_ylim()
     plt.show()
 
 
