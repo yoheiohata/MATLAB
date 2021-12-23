@@ -68,17 +68,17 @@ h_notch = load('notch3.cof');
 figure;
 x = [notch_freq_1 notch_freq_1];
 y = [limy_low limy_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","f="+notch_freq_1+"Hz");
+line(x,y,'Color','green','linestyle','--',"DisplayName","f="+notch_freq_1);
 x = [notch_freq_2 notch_freq_2];
 y = [limy_low limy_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","f="+notch_freq_2+"Hz");
+line(x,y,'Color','green','linestyle','--',"DisplayName","f="+notch_freq_2);
 legend("location","southeast")
 hold on
 plot(w/fs2, 20*log(abs(H_notch)),"DisplayName","Amplitude");
 hold off
 xlim([0 1]);
 ylim([limy_low limy_high]);
-xlabel("Normalized Angular Frequency   [rad/sample]");
+xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
 ylabel("Magnitude   [dB] ");
 exportgraphics(gca,strcat('.\figure\notch','.pdf'),'ContentType','vector');
 

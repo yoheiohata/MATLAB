@@ -14,10 +14,10 @@ set(0,'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2);
 % filter params
 N = 30;
 N1 = 60;
-f_left_stop  = 0.19;
-f_left_pass  = 0.2;
-f_right_pass = 0.8;
-f_right_stop = 0.81;
+f_left_stop  = 0.2;
+f_left_pass  = 0.3;
+f_right_pass = 0.7;
+f_right_stop = 0.8;
 Weight = [1 1 1];
 fs = 4000;
 fs2 = fs/2;
@@ -28,7 +28,7 @@ F=0:0.1:fs2;
 f = [0 f_left_stop f_left_pass f_right_pass f_right_stop 1];
 a = [0 0 1 1 0 0];
 
-y_low = -100;
+y_low = -200;
 y_high = 20;
 
 %% design filter
@@ -48,6 +48,8 @@ plot(w/fs2, 20*log(abs(H_HT1)),"DisplayName","N="+N1);
 hold off
 xlim([0 1]);
 ylim([y_low y_high])
+xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
+ylabel("Magnitude   [dB] ");
 legend("location", "northeast")
 exportgraphics(gca,strcat('.\figure\amp_bpht.pdf'),'ContentType','vector');
 
