@@ -51,5 +51,24 @@ ylim([y_low y_high])
 xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
 ylabel("Magnitude   [dB] ");
 legend("location", "northeast")
-exportgraphics(gca,strcat('.\figure\amp_bpht.pdf'),'ContentType','vector');
+% exportgraphics(gca,strcat('.\figure\amp_bpht.pdf'),'ContentType','vector');
 
+%% SNR
+
+% signal params
+A = 1;
+A_noize_rate = 0.7;
+sig_f = 0.46*fs2;
+sig_f_n = 0.1*fs2;
+
+% define signal
+sig = A*cos(2*pi*sig_f*t);
+sig_n = sig + A_noize_rate*A*cos(2*pi*sig_f_n*t);
+
+% filtering
+sig_n_zeros = [sig_n zeros(1,N/2)];
+sig_n_Re = sig_n_zeros(1:end-N/2);
+sig_n_Im_BPHT = filter(h_HT,1,sig_n_zeros);
+
+% cal SNrate
+SN_BPHT = snr(sig_n_Im_BPHT, fs)
