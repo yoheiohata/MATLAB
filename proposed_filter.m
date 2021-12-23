@@ -87,4 +87,5 @@ ylim([y_low y_high]);
 xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
 ylabel("Magnitude   [dB] ");
 legend("location", "southwest")
-exportgraphics(gca,strcat('.\figure\amp_proposed_N=',num2str(N+2),'.pdf'),'ContentType','vector');
+% exportgraphics(gca,strcat('.\figure\amp_proposed_N=',num2str(N+2),'.pdf'),'ContentType','vector');
+

@@ -87,7 +87,7 @@ legend("location", "southeast")
 % figure;
 % plot(w/fs2, 20*log(abs(H_HT1)));
 % ylim([y_low y_high]);
-%% assess signal
+%% assess signal(SN)
 
 sig_f = 296.875;
 sig_f_n = 140.625;

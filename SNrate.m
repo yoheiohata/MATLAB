@@ -50,7 +50,7 @@ f_right_pass = 0.7;
 
 %ノッチの場所
 notch_freq_1 = 0.1;       
-notch_freq_2 = 0.15;
+notch_freq_2 = 0.9;
 
 
 
@@ -89,19 +89,19 @@ y_low = -100;
 y_high = 20;
 %% ノッチヒルベルト用ヒルベルト変換器(手法1と3に用いるやつ)
 %ノッチヒルベルト用ヒルベルト変換器
-[h_HT,err,res]=firpm(N_rearHT, f, a, {10000}, Weight,'hilbert'); %フィルタ係数の算出
-[H_HT,w]=freqz(h_HT,1,F,fs);
+[h_BPHT,err,res]=firpm(N_rearHT, f, a, {10000}, Weight,'hilbert'); %フィルタ係数の算出
+[H_BPHT,w]=freqz(h_BPHT,1,F,fs);
 %% ノッチフィルタ
 
-%　ノッチフィルタ
-nf1 = 3600*180/fs2;    r1=1;        %notch1 & on,off
-nf2 = 7200*180/fs2;    r2=1;        %notch2 & on,off
-nf3 = 3600*180/fs2;    r3=1;        %notch3 & on,off
+%　notch filter
+nf1 = 3600*180/fs2;    r1=1;
+nf2 = 7200*180/fs2;    r2=1;
+nf3 = 3600*180/fs2;    r3=1;
 
 D2=1;
 D4=1;
 
-notch_weight1=[1 1 1];     %伝達関数後段の重み[第一帯域 第二帯域　第三帯域]
+notch_weight1=[1 1 1];
 notch_amplitude1=[0 0 1 1 0 0];
 
 [notch1,notch2,notch3]=notch(nf1,nf2,nf3,D2,D4,fs2,r1,r2,r3);
@@ -117,12 +117,9 @@ save notch1.cof notch1 -ascii;
 save notch2.cof notch2 -ascii;
 save notch3.cof notch3 -ascii;
 
-
-h_coefficient_notch = load('notch3.cof');
-[h_amplitude_notch,w]=freqz(h_coefficient_notch,1,F,fs);   
 fresp3 = {'fresp_h3',a};
-%% フィルタ合成(ノッチフィルタ＋補正ヒルベルト変換)
-
+h_notch = load('notch3.cof');
+[H_notch,w]=freqz(h_notch,1,F,fs);   
 
 %補正ヒルベルトフィルタの作成
 h_coefficient_compensationHT=firpm(N_rearHT,f,fresp3,Weight,'hilbert');
@@ -130,10 +127,8 @@ h_coefficient_compensationHT=firpm(N_rearHT,f,fresp3,Weight,'hilbert');
 
 
 %フィルタ合成(ノッチフィルタ＋ヒルベルト変換器)
-h_coefficient_notchCHT=conv(h_coefficient_notch,h_coefficient_compensationHT);
+h_coefficient_notchCHT=conv(h_notch,h_coefficient_compensationHT);
 [h_amplitude_notchCHT,w]=freqz(h_coefficient_notchCHT,1,F,fs);
-h_amplitude_nCHT_evaluation(:,1) = w/fs2;
-h_amplitude_nCHT_evaluation(:,2) = h_amplitude_notchCHT;
 
 %% 設計したフィルタでヒルベルト変換
 for j=(f_left_pass*fs2):2000:(f_right_pass*fs2)
@@ -162,8 +157,8 @@ sig_n_1=[sig_n zeros(1,N_rearHT/2)];
 %% ヒルベルト変換とSN比計算
 
 %阻止域を有するのFIRヒルベルト変換器とSN比
-sig_htout=filter(h_HT,1,sig_1);
-sig_noize_htout=filter(h_HT,1,sig_n_1);
+sig_htout=filter(h_BPHT,1,sig_1);
+sig_noize_htout=filter(h_BPHT,1,sig_n_1);
 SNR_out=snr(sig_htout);
 SNR_noize_out=snr(sig_noize_htout);
 

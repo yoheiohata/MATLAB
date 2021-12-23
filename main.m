@@ -484,7 +484,7 @@ end
 
 %% 結果出力
 figure;
-plot(t(1:end-1),IF_3,'LineWidth',2,'color',color2); %瞬時周波数の確認
+plot(t(1:end-1),IF_3,'LineWi dth',2,'color',color2); %瞬時周波数の確認
 hold on;
 plot(t(1:end-1),IF_loop,'--','LineWidth',2.4,'color',color3);
 plot(t(1:end-1),e_3,':','LineWidth',1.7,'color',color4);
