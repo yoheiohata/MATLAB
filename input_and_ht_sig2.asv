@@ -1,5 +1,5 @@
 clear;close all;clc; % clear:ワークスペースの変数をクリア clc:コマンドウィンドウのクリア
-%% setting default params
+
 color1=[0 0.4470 0.7410];
 color2=[0.8500 0.3250 0.0980];
 color3=[0.9290 0.6940 0.1250];
@@ -38,15 +38,12 @@ plot(W/fs2,20*log(abs(H)));
 ylim([-100 20])
 xlabel 'Normalized Frequency (\times\pi rad/sample)'
 ylabel 'Magnitude   [dB]'
-export
 
-%% filtering
 sig_1=[sig zeros(1,N/2)];
 sig_Im=filter(h,1,sig_1);
 sig_Re=sig_1(1:end-N/2);
 sig_analysis=sig_Re+1i*sig_Im((N/2+1):end);
 
-%% draw in/out signals
 figure;
 plot(t,sig);
 hold on;
