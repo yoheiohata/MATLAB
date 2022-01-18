@@ -1,5 +1,12 @@
 clear;close all;clc
 
+color1=[0 0.4470 0.7410];
+color2=[0.8500 0.3250 0.0980];
+color3=[0.9290 0.6940 0.1250];
+color4=[0.4940 0.1840 0.5560];
+color5=[0.4660 0.6740 0.1880];
+color6=[0.3010 0.7450 0.9330];
+
 set(0,'defaultTextFontName','Times New Roman');
 set(0,'defaultLegendFontName','Times New Roman');
 set(0,'defaultAxesFontName','times new roman');
@@ -8,9 +15,9 @@ set(0,'defaultAxesBox','on');
 set(0,'defaultAxesYGrid','on');
 set(0,'defaultAxesXGrid','on');
 set(0,'defaultAxesFontSize',16);
-set(0,'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2); 
+set(0, 'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2); 
 
-%% params
+%% %% params
 % filter params
 N = 28;
 f_left_stop  = 0.2;
@@ -29,8 +36,8 @@ F=0:0.1:fs2;
 f = [0 f_left_stop f_left_pass f_right_pass f_right_stop 1];
 a = [0 0 1 1 0 0];
 
-y_low = -150;
-y_high = 150;
+y_low = -200;
+y_high = 20;
 
 %% design filter
 
@@ -53,35 +60,49 @@ notch3 = notch3/sum(notch3);
 save notch1.cof notch1 -ascii;
 save notch2.cof notch2 -ascii;
 save notch3.cof notch3 -ascii;
+fresp1 = {'fresp_h1',a};
+fresp2 = {'fresp_h2',a};
+fresp3 = {'fresp_h3',a};
 h_notch = load('notch3.cof');
 [H_notch,w]=freqz(h_notch,1,F,fs);   
 
 % hilbert filter 
-h_HT=firpm(N,f,a,Weight,'hilbert');
+h_HT=firpm(N,f,fresp3,Weight,'hilbert');
 [H_HT,w]=freqz(h_HT,1,F,fs);
 
 % convolution
-h_nBPHT=conv(h_notch,h_HT);
-[H_nBPHT,w]=freqz(h_nBPHT,1,F,fs);
+h_CHT=conv(h_notch,h_HT);
+[H_CHT,w]=freqz(h_CHT,1,F,fs);
 
-%% draw
+%% signal process
+% In this section, a signal with params below input into the filter designed
+% above, and fetch output a signals.
+sig_f = 1000;
+sig_f_n = 140;
+A = 1;
+A_noize_rate = 0.7;
+
+sig = A*cos(2*pi*sig_f*t);
+sig_n = sig + A_noize_rate*A*cos(2*pi*sig_f_n*t);
+
+sig_n_zeros = [sig_n zeros(1,N/2)];
+sig_n_Im = filter(h_CHT,1,sig_n_zeros);
+sig_n_Re = sig_n_zeros(1:end-N/2);
+sig_analysis = sig_n_Re + 1i*sig_n_Im((N/2+1):end);
+
+
 figure;
-x = [notch_freq_1 notch_freq_1];
-y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_1);
-x = [notch_freq_2 notch_freq_2];
-y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_2);
-
-
+plot(t, sig_n);
 hold on
-plot(w/fs2, 20*log(abs(H_notch)),"DisplayName","notch");
-plot(w/fs2, 20*log(abs(H_HT)),"DisplayName","ht")
-plot(w/fs2, 20*log(abs(H_nBPHT)),"DisplayName","all")
+plot(t, sig_n_Im((N/2+1):end));
 hold off
-xlim([0 1]);
-ylim([y_low y_high]);
-xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
-ylabel("Magnitude   [dB] ");
-legend("location", "northwest")
-exportgraphics(gca,strcat('.\figure\amp_nbpht_N=',num2str(N+2),'.pdf'),'ContentType','vector');
+xlim([0.01 0.02]);
+ylim([-1.5 1.5])
+legend()
+
+%% estimate frequency
+phase=angle(sig_analysis); %解析信号の位相角を計算
+phase=unwrap(phase); %滑らかになるよう位相角の修正
+omega_tilde_low=diff(phase)/ts; %位相角の微分
+IF=omega_tilde_low/(2*pi); %瞬時周波数
+plotfft(IF,fs); %瞬時周波数のスペクトルを表示

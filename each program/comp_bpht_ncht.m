@@ -74,10 +74,10 @@ h_CHT=conv(h_notch,h_HT);
 figure;
 x = [notch_freq_1 notch_freq_1];
 y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_1);
+line(x,y,'Color','green','linestyle','--',"DisplayName","f(noise)="+notch_freq_1);
 x = [notch_freq_2 notch_freq_2];
 y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_2);
+line(x,y,'Color','green','linestyle','--',"DisplayName","f(noise)="+notch_freq_2);
 
 
 hold on
@@ -88,6 +88,6 @@ xlim([0 1]);
 ylim([y_low y_high]);
 xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
 ylabel("Magnitude   [dB] ");
-legend("location", "northwest")
-% exportgraphics(gca,strcat('.\figure\comp_bpht_ncht',num2str(N),'.pdf'),'ContentType','vector');
+legend("location", "northeast")
+exportgraphics(gca,strcat('.\figure\comp_bpht_ncht',num2str(N),'.pdf'),'ContentType','vector');
 

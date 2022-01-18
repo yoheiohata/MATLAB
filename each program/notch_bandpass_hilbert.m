@@ -12,13 +12,13 @@ set(0,'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2);
 
 %% params
 % filter params
-N = 28;
+N = 30;
 f_left_stop  = 0.2;
 f_left_pass  = 0.3;
 f_right_pass = 0.7;
 f_right_stop = 0.8;
-notch_freq_1 = 0.07;
-notch_freq_2 = 0.15;
+notch_freq_1 = 0.04;
+notch_freq_2 = 0.17;
 Weight = [1 1 1];
 fs = 4000;
 fs2 = fs/2;
@@ -29,8 +29,8 @@ F=0:0.1:fs2;
 f = [0 f_left_stop f_left_pass f_right_pass f_right_stop 1];
 a = [0 0 1 1 0 0];
 
-y_low = -200;
-y_high = 20;
+y_low = -150;
+y_high = 200;
 
 %% design filter
 
@@ -53,39 +53,35 @@ notch3 = notch3/sum(notch3);
 save notch1.cof notch1 -ascii;
 save notch2.cof notch2 -ascii;
 save notch3.cof notch3 -ascii;
-fresp1 = {'fresp_h1',a};
-fresp2 = {'fresp_h2',a};
-fresp3 = {'fresp_h3',a};
 h_notch = load('notch3.cof');
 [H_notch,w]=freqz(h_notch,1,F,fs);   
 
 % hilbert filter 
-h_HT=firpm(N,f,fresp3,Weight,'hilbert');
+h_HT=firpm(N-4,f,a,Weight,'hilbert');
 [H_HT,w]=freqz(h_HT,1,F,fs);
 
 % convolution
-h_CHT=conv(h_notch,h_HT);
-[H_CHT,w]=freqz(h_CHT,1,F,fs);
+h_nBPHT=conv(h_notch,h_HT);
+[H_nBPHT,w]=freqz(h_nBPHT,1,F,fs);
 
 %% draw
 figure;
 x = [notch_freq_1 notch_freq_1];
 y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_1);
+line(x,y,'Color','green','linestyle','--',"DisplayName","f(noize)="+notch_freq_1);
 x = [notch_freq_2 notch_freq_2];
 y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","noize="+notch_freq_2);
+line(x,y,'Color','green','linestyle','--',"DisplayName","f(noize)="+notch_freq_2);
 
 
 hold on
 plot(w/fs2, 20*log(abs(H_notch)),"DisplayName","notch");
 plot(w/fs2, 20*log(abs(H_HT)),"DisplayName","ht")
-plot(w/fs2, 20*log(abs(H_CHT)),"DisplayName","all")
+plot(w/fs2, 20*log(abs(H_nBPHT)),"DisplayName","all")
 hold off
 xlim([0 1]);
 ylim([y_low y_high]);
 xlabel("Normalized Angular Frequency(\times\pi)   [rad/sample]");
 ylabel("Magnitude   [dB] ");
-legend("location", "southwest")
-% exportgraphics(gca,strcat('.\figure\amp_proposed_N=',num2str(N+2),'.pdf'),'ContentType','vector');
-
+legend("location", "northwest")
+exportgraphics(gca,strcat('.\figure\amp_nbpht_N=',num2str(N),'.pdf'),'ContentType','vector');

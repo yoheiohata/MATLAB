@@ -19,7 +19,7 @@ set(0, 'DefaultAxesLineWidth', 1, 'DefaultLineLineWidth', 2);
 %% setting params
 fs = 50000;
 fs2 = fs/2;
-N=40;
+N=30;
 L=15000;
 ts=1/fs;
 t=(0:L-1)*ts;
@@ -38,7 +38,7 @@ plot(W/fs2,20*log(abs(H)));
 ylim([-100 20])
 xlabel 'Normalized Frequency (\times\pi rad/sample)'
 ylabel 'Magnitude   [dB]'
-export
+exportgraphics(gca,strcat('.\figure\amp_ht_N=',num2str(N),'.pdf'),'ContentType','vector');
 
 %% filtering
 sig_1=[sig zeros(1,N/2)];
