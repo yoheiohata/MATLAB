@@ -29,8 +29,8 @@ F=0:0.1:fs2;
 f = [0 f_left_stop f_left_pass f_right_pass f_right_stop 1];
 a = [0 0 1 1 0 0];
 
-y_low = -150;
-y_high = 20;
+y_low = -160;
+y_high = 40;
 
 %% design filter
 
@@ -78,8 +78,8 @@ line(x,y,'Color','green','linestyle','--',"DisplayName","f(noise)="+notch_freq_2
 
 
 hold on
-% plot(w/fs2, 20*log(abs(H_notch)),"DisplayName","notch");
-% plot(w/fs2, 20*log(abs(H_HT)),"DisplayName","ht")
+plot(w/fs2, 20*log(abs(H_notch)),"DisplayName","notch");
+plot(w/fs2, 20*log(abs(H_HT)),"DisplayName","ht")
 plot(w/fs2, 20*log(abs(H_CHT)),"DisplayName","all")
 hold off
 xlim([0 1]);

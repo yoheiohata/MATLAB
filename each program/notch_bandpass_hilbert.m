@@ -68,10 +68,10 @@ h_nBPHT=conv(h_notch,h_HT);
 figure;
 x = [notch_freq_1 notch_freq_1];
 y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","f(noize)="+notch_freq_1);
+line(x,y,'Color','green','linestyle','--',"DisplayName","f(noise)="+notch_freq_1);
 x = [notch_freq_2 notch_freq_2];
 y = [y_low y_high];
-line(x,y,'Color','green','linestyle','--',"DisplayName","f(noize)="+notch_freq_2);
+line(x,y,'Color','green','linestyle','--',"DisplayName","f(noise)="+notch_freq_2);
 
 
 hold on
